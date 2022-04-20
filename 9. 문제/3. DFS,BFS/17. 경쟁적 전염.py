@@ -15,30 +15,22 @@ dy = [0, 0, 1, -1]
 
 # 바이러스 위치 리스트에 저장 => 순서대로 큐에 넣기
 virus = []
-queue = deque()
 for i in range(n):
     for j in range(n):
         num = graph[i][j]
         # 바이러스 있는 경우
         if num != 0:
             virus.append((num, i, j))
-virus.sort(reverse=True)
-
-
-# 다음 바이러스 큐에 넣기
-def next_virus():
-    while virus:
-        queue.append(virus.pop())
+virus.sort()
+queue = deque(virus)
 
 
 # 바이러스 퍼짐
 def bfs_virus(time):
-    while True:
+    while queue:
         if time == s:
-            print(graph[x - 1][y - 1])
             return
-        next_virus()
-        while queue:
+        for _ in range(len(queue)):
             # 바이러스번호, 좌표
             a, b, c = queue.popleft()
             for i in range(4):
@@ -47,8 +39,9 @@ def bfs_virus(time):
                 if 0 <= nx < n and 0 <= ny < n:
                     if graph[nx][ny] == 0:
                         graph[nx][ny] = a
-                        virus.append((num, i, j))
+                        queue.append((a, nx, ny))
         time = time + 1
 
 
 bfs_virus(0)
+print(graph[x - 1][y - 1])
